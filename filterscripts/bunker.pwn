@@ -1559,8 +1559,8 @@ CreateGeneralItems() {
     g_DynamicObject[658] = CreateDynamicObject(19610, -1589.1804, -2571.2834, -4.1230, -144.2397, 0.0000, 32.0998); //Microphone1
     SetDynamicObjectMaterial(g_DynamicObject[658], 0, -1, "none", "none", 0xFF696969);
 
-    g_Vehicle[0] = CreateVehicle(509, -1506.5611, -2658.3071, -6.4211, 95.5743, 0, 0, -1); //Bike
-    g_Vehicle[1] = CreateVehicle(530, -1582.5765, -2705.8889, 1.7796, 183.5193, 0, 0, -1); //Forklift
+    g_Vehicle[0] = CreateVehicle(509, -1506.5611, -2658.3071, -6.4211, 95.5743, 0, 0, 20); //Bike
+    g_Vehicle[1] = CreateVehicle(530, -1582.5765, -2705.8889, 1.7796, 183.5193, 0, 0, 20); //Forklift
 
     g_DynamicActor[ACTOR_ENTRY_GUARD] = CreateDynamicActor(71, -1570.8188, -2569.7690, 28.7656, 31.2999, .streamdistance = 50.0);
     g_DynamicActor[ACTOR_HOMELESS] = CreateDynamicActor(78, -1510.5262, -2660.7250, -6.6230, 32.5998, .streamdistance = 50.0); 
