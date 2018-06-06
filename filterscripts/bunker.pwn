@@ -20,6 +20,25 @@
     ( newkeys & %0 == %0 && oldkeys & %0 != %0 )
 
 enum {
+    ACTOR_ENTRY_GUARD,
+    ACTOR_STAIRWAY_GUARD_1,
+    ACTOR_STAIRWAY_GUARD_2,
+    ACTOR_RECEPTION_GUARD_1,
+    ACTOR_RECEPTION_GUARD_2,
+    ACTOR_MECHANIC,
+    ACTOR_HOMELESS,
+    ACTOR_CAMERAMAN,
+    ACTOR_VIP,
+    ACTOR_CHEF,
+    ACTOR_BARTENDER,
+    ACTOR_FOREMAN,
+    ACTOR_RECEPTIONIST,
+    ACTOR_IT_SUPPORT,
+    ACTOR_STYLIST,
+    MAX_BUNKER_ACTORS
+}
+
+enum {
     ELEVSTATE_LOADING,  // elevator not initiated / loading
     ELEVSTATE_CLOSE,    // elevator close
     ELEVSTATE_OPEN,     // elevator open
@@ -69,7 +88,8 @@ enum e_DoorData {
 new
           g_DynamicObject [ 659 ],
           g_Vehicle       [ 2 ],
-          g_Actor         [ 15 ],
+          g_VehicleObject [ 2 ],
+          g_DynamicActor  [ MAX_BUNKER_ACTORS ],
           g_ElevData      [ e_ElevData ],
           g_DoorData      [ MAX_DOORS ][ e_DoorData ],
           g_DoorsInitiated,
@@ -362,6 +382,11 @@ UpdateDoorState(doorid) {
 }
 
 CreateGeneralItems() {
+    g_VehicleObject[0] = CreateObject(18763, -1506.1892, -2658.1350, -8.4806, 93.0999, 0.0000, -59.5999); //bike fallstop
+    SetObjectMaterial(g_VehicleObject[0], 0, -1, "none", "none", 0x00FFFFFF);
+    g_VehicleObject[1] = CreateObject(18763, -1582.5469, -2706.0200, -0.4629, 90.0000, 0.0000, 0.0000); //forklift fallstop
+    SetObjectMaterial(g_VehicleObject[1], 0, -1, "none", "none", 0x00FFFFFF);
+
     g_DynamicObject[0] = CreateDynamicObject(1523, -1584.7768, -2572.9116, -6.9896, 0.0000, 0.0000, -58.4999); //freezer door
     SetDynamicObjectMaterial(g_DynamicObject[0], 0, -1, "none", "none", 0xFF696969);
     g_DynamicObject[1] = CreateDynamicObject(19828, -1580.5672, -2564.8098, -5.8962, 0.0000, 0.0000, -149.8999); //LightSwitch3Off
@@ -883,7 +908,7 @@ CreateGeneralItems() {
     SetDynamicObjectMaterial(g_DynamicObject[275], 0, 14652, "ab_trukstpa", "CJ_WOOD1(EDGE)", 0xFFD2B48C);
     g_DynamicObject[276] = CreateDynamicObject(2568, -1598.2939, -2571.2192, -7.0107, 0.0000, 0.0000, -58.8997); //Hotel_dresser_3
     SetDynamicObjectMaterial(g_DynamicObject[276], 2, 14652, "ab_trukstpa", "CJ_WOOD1(EDGE)", 0xFFD2B48C);
-    g_DynamicObject[277] = CreateDynamicObject(2257, -1594.4171, -2562.5297, -4.6121, 0.0000, 0.0000, 31.0000); //Frame_Clip_4
+    g_DynamicObject[277] = CreateDynamicObject(2257, -1594.4171, -2562.5297, -4.6121, 0.0000, 0.0000, 31.0000); //Red Bridge BG
     SetDynamicObjectMaterial(g_DynamicObject[277], 1, 17555, "eastbeach3c_lae2", "gradient128", 0xFF696969);
     g_DynamicObject[278] = CreateDynamicObject(2571, -1599.0201, -2575.6467, -7.0240, 0.0000, 0.0000, 96.3000); //Hotel_SINGLE_1
     SetDynamicObjectMaterial(g_DynamicObject[278], 0, 14652, "ab_trukstpa", "CJ_WOOD1(EDGE)", 0xFFD2B48C);
@@ -891,7 +916,7 @@ CreateGeneralItems() {
     g_DynamicObject[279] = CreateDynamicObject(19934, -1589.1850, -2571.2878, -7.0054, 0.0000, 0.0000, -59.2999); //speech table
     SetDynamicObjectMaterial(g_DynamicObject[279], 0, 19267, "mapmarkers", "samporange", 0x00000000);
     g_DynamicObject[280] = CreateDynamicObject(19581, -1583.2635, -2569.5683, -5.9573, 0.0000, 0.0000, 79.0998); //MarcosFryingPan1
-    g_DynamicObject[281] = CreateDynamicObject(2257, -1576.6944, -2573.6545, -4.9218, 0.0000, 0.0000, -148.6997); //Frame_Clip_4
+    g_DynamicObject[281] = CreateDynamicObject(2257, -1576.6944, -2573.6545, -4.9218, 0.0000, 0.0000, -148.6997); //Kitchen Painting
     SetDynamicObjectMaterial(g_DynamicObject[281], 1, 2254, "picture_frame_clip", "CJ_PAINTING24", 0x00000000);
     g_DynamicObject[282] = CreateDynamicObject(19482, -1588.0478, -2573.0349, -3.3473, 0.0000, 0.0000, -58.6999); //greenscreen
     SetDynamicObjectMaterial(g_DynamicObject[282], 0, 18835, "mickytextures", "whiteforletters", 0xFF00FF00);
@@ -927,7 +952,7 @@ CreateGeneralItems() {
     g_DynamicObject[290] = CreateDynamicObject(2394, -1590.0268, -2576.5776, -5.4895, 0.0000, 0.0000, -59.0000); //CJ_CLOTHES_STEP_1
     g_DynamicObject[291] = CreateDynamicObject(19893, -1590.5899, -2568.6215, -6.1477, -360.0000, -359.9999, -121.6798); //LaptopSAMP1
     SetDynamicObjectMaterial(g_DynamicObject[291], 1, 19894, "laptopsamp1", "laptopscreen2", 0x00000000);
-    g_DynamicObject[292] = CreateDynamicObject(2257, -1594.4171, -2562.5297, -4.6121, 0.0000, 0.0000, 31.0000); //Frame_Clip_4
+    g_DynamicObject[292] = CreateDynamicObject(2257, -1594.4014, -2562.5554, -4.6121, 0.0000, 0.0000, 31.0000); //Red Bridge Painting
     SetDynamicObjectMaterial(g_DynamicObject[292], 1, 10838, "airwelcomesign_sfse", "ws_airwelcome1", 0xFF191970);
     g_DynamicObject[293] = CreateDynamicObject(19475, -1577.3543, -2558.3718, 17.8981, 0.0000, 0.0000, 120.8001); //mazarot eye
     SetDynamicObjectMaterialText(g_DynamicObject[293], 0, "N", OBJECT_MATERIAL_SIZE_256x256, "Webdings", 150, 1, 0xFF000000, 0x00000000, 1);
@@ -1132,26 +1157,26 @@ CreateGeneralItems() {
     g_DynamicObject[433] = CreateDynamicObject(19828, -1589.7873, -2564.0642, -5.8962, 0.0000, 0.0000, 121.5998); //LightSwitch3Off
     SetDynamicObjectMaterial(g_DynamicObject[433], 0, -1, "none", "none", 0xFFFFFFFF);
     g_DynamicObject[434] = CreateDynamicObject(18075, -1580.1866, -2559.5058, -3.0868, 0.0000, 0.0000, -59.0998); //lightD
-    g_DynamicObject[435] = CreateDynamicObject(2257, -1582.6350, -2557.4255, -4.9116, 0.0000, 0.0000, -58.8996); //Frame_Clip_4
+    g_DynamicObject[435] = CreateDynamicObject(2257, -1582.6350, -2557.4255, -4.9116, 0.0000, 0.0000, -58.8996); //skull painting
     SetDynamicObjectMaterial(g_DynamicObject[435], 1, 8421, "pirateland", "tislndskullrock_256", 0x00000000);
-    g_DynamicObject[436] = CreateDynamicObject(2257, -1581.1545, -2559.9145, -4.8719, 0.0000, 180.0000, -58.8996); //Frame_Clip_4
+    g_DynamicObject[436] = CreateDynamicObject(2257, -1581.1545, -2559.9145, -4.8719, 0.0000, 180.0000, -58.8996); //skull painting
     SetDynamicObjectMaterial(g_DynamicObject[436], 1, 8421, "pirateland", "tislndskullrock_256", 0xFFC0C0C0);
     g_DynamicObject[437] = CreateDynamicObject(19935, -1579.5788, -2561.0131, -5.0486, 0.0000, 0.0000, -58.7000); //MKCupboard2
     SetDynamicObjectMaterial(g_DynamicObject[437], 0, 17555, "eastbeach3c_lae2", "gradient128", 0xFFD2691E);
-    g_DynamicObject[438] = CreateDynamicObject(2257, -1585.3249, -2557.0705, -4.9317, 0.0000, 0.0000, 31.1004); //Frame_Clip_4
+    g_DynamicObject[438] = CreateDynamicObject(2257, -1585.3249, -2557.0705, -4.9317, 0.0000, 0.0000, 31.1004); //V Rock Painting
     SetDynamicObjectMaterial(g_DynamicObject[438], 1, 6864, "vgnvrock", "vrocksign1_256", 0xFF696969);
     g_DynamicObject[439] = CreateDynamicObject(1708, -1592.8979, -2562.5402, -6.9847, 0.0000, 0.0000, 0.0000); //kb_chair02
     SetDynamicObjectMaterial(g_DynamicObject[439], 1, 2023, "bitsnbobs", "CJ_LIGHTWOOD", 0xFFD2B48C);
     SetDynamicObjectMaterial(g_DynamicObject[439], 2, 18901, "matclothes", "hatmap1", 0xFF191970);
     g_DynamicObject[440] = CreateDynamicObject(19631, -1583.2740, -2701.0273, 1.8772, 0.0000, 87.1996, -34.9000); //SledgeHammer1
-    g_DynamicObject[441] = CreateDynamicObject(2257, -1579.7220, -2562.2849, -4.9119, 0.0000, 0.0000, -58.8996); //Frame_Clip_4
+    g_DynamicObject[441] = CreateDynamicObject(2257, -1579.7220, -2562.2849, -4.9119, 0.0000, 0.0000, -58.8996); //skull painting
     SetDynamicObjectMaterial(g_DynamicObject[441], 1, 8421, "pirateland", "tislndskullrock_256", 0xFF696969);
     g_DynamicObject[442] = CreateDynamicObject(1708, -1595.5499, -2564.6416, -6.9847, 0.0000, 0.0000, 58.7999); //kb_chair02
     SetDynamicObjectMaterial(g_DynamicObject[442], 1, 2023, "bitsnbobs", "CJ_LIGHTWOOD", 0xFFD2B48C);
     SetDynamicObjectMaterial(g_DynamicObject[442], 2, 18901, "matclothes", "hatmap1", 0xFF191970);
     g_DynamicObject[443] = CreateDynamicObject(19786, -1578.0832, -2564.6950, -4.9826, 0.0000, 0.0000, 121.1996); //LCDTVBig1
     SetDynamicObjectMaterial(g_DynamicObject[443], 1, 6357, "sunstrans_law2", "SunBillB10", 0x00000000);
-    g_DynamicObject[444] = CreateDynamicObject(2257, -1590.2606, -2560.0373, -4.9317, 0.0000, 0.0000, 31.1004); //Frame_Clip_4
+    g_DynamicObject[444] = CreateDynamicObject(2257, -1590.2606, -2560.0373, -4.9317, 0.0000, 0.0000, 31.1004); //Love Fist Painting
     SetDynamicObjectMaterial(g_DynamicObject[444], 1, 6354, "sunset03_law2", "billLA01", 0x00000000);
     g_DynamicObject[445] = CreateDynamicObject(2292, -1578.1042, -2553.3068, -7.0061, 0.0000, 0.0000, -59.0998); //SWK_SINGLE_1b
     g_DynamicObject[446] = CreateDynamicObject(18635, -1581.9675, -2556.9484, -6.8554, -86.5000, 0.0000, 44.5998); //GTASAHammer1
@@ -1194,7 +1219,7 @@ CreateGeneralItems() {
     SetDynamicObjectMaterial(g_DynamicObject[467], 0, 17555, "eastbeach3c_lae2", "gradient128", 0xFFD2691E);
     g_DynamicObject[468] = CreateDynamicObject(19835, -1580.6118, -2557.5209, -5.9653, 0.0000, 0.0000, -142.1999); //CoffeeCup1
     g_DynamicObject[469] = CreateDynamicObject(2292, -1568.9858, -2568.4492, -7.0061, 0.0000, 0.0000, -149.0997); //SWK_SINGLE_1b
-    g_DynamicObject[470] = CreateDynamicObject(2257, -1593.1230, -2570.6347, -4.9218, 0.0000, 0.0000, -59.0996); //Frame_Clip_4
+    g_DynamicObject[470] = CreateDynamicObject(2257, -1593.1230, -2570.6347, -4.9218, 0.0000, 0.0000, -59.0996); //Desert Painting
     SetDynamicObjectMaterial(g_DynamicObject[470], 1, 2254, "picture_frame_clip", "CJ_PAINTING26", 0x00000000);
     g_DynamicObject[471] = CreateDynamicObject(2291, -1569.7401, -2567.2167, -7.0219, 0.0000, 0.0000, -58.2999); //SWK_SINGLE_1
     g_DynamicObject[472] = CreateDynamicObject(2292, -1569.9770, -2566.8300, -7.0061, 0.0000, 0.0000, -59.0998); //SWK_SINGLE_1b
@@ -1537,39 +1562,28 @@ CreateGeneralItems() {
     g_Vehicle[0] = CreateVehicle(509, -1506.5611, -2658.3071, -6.4211, 95.5743, 0, 0, -1); //Bike
     g_Vehicle[1] = CreateVehicle(530, -1582.5765, -2705.8889, 1.7796, 183.5193, 0, 0, -1); //Forklift
 
-    g_Actor[0] = CreateActor(71, -1570.8188, -2569.7690, 28.7656, 31.2999); //entry guard
-    ApplyActorAnimation(g_Actor[0], "COP_AMBIENT", "COPLOOK_LOOP", 4.0998, 1, 0, 0, 0, 0);
-    g_Actor[1] = CreateActor(78, -1510.5262, -2660.7250, -6.6230, 32.5998); //homeless man
-    ApplyActorAnimation(g_Actor[1], "CRACK", "CRCKIDLE2", 4.0998, 1, 0, 0, 0, 0);
-    g_Actor[2] = CreateActor(166, -1586.2397, -2561.5456, 0.1483, -59.2999); //stairway guard
-    ApplyActorAnimation(g_Actor[2], "MUSCULAR", "MUSCLEIDLE", 4.0998, 1, 0, 0, 0, 0);
-    g_Actor[3] = CreateActor(50, -1603.0024, -2721.0073, 3.8322, 0.0000); //submarine mechanic
-    ApplyActorAnimation(g_Actor[3], "COP_AMBIENT", "COPBROWSE_LOOP", 4.0998, 1, 0, 0, 0, 0);
-    g_Actor[4] = CreateActor(165, -1578.9365, -2554.5410, 23.1464, 125.4999); //stairway guard
-    ApplyActorAnimation(g_Actor[4], "MUSCULAR", "MUSCLEIDLE", 4.0998, 1, 0, 0, 0, 0);
-    g_Actor[5] = CreateActor(166, -1574.5638, -2563.5524, -5.2494, 123.5998); //receptionist guard
-    ApplyActorAnimation(g_Actor[5], "MISC", "IDLE_CHAT_02", 4.0998, 1, 0, 0, 0, 0);
-    g_Actor[6] = CreateActor(98, -1590.0212, -2570.8911, -6.2136, -132.8000); //cameraman
-    ApplyActorAnimation(g_Actor[6], "MISC", "IDLE_CHAT_02", 4.0998, 1, 0, 0, 0, 0);
-    g_Actor[7] = CreateActor(147, -1588.7939, -2571.8769, -5.8014, 45.4998); //mazarot presenter
-    ApplyActorAnimation(g_Actor[7], "PED", "IDLE_CHAT", 4.0998, 1, 0, 0, 0, 0);
-    g_Actor[8] = CreateActor(165, -1575.6761, -2564.2697, -5.3976, -58.7999); //reception guard
-    ApplyActorAnimation(g_Actor[8], "PED", "IDLE_CHAT", 4.0998, 1, 0, 0, 0, 0);
-    g_Actor[9] = CreateActor(210, -1585.1816, -2569.4069, -6.3586, -55.0998); //chef
-    ApplyActorAnimation(g_Actor[9], "ON_LOOKERS", "PANIC_LOOP", 4.0998, 1, 0, 0, 0, 0);
-    g_Actor[10] = CreateActor(59, -1581.4663, -2575.1784, -5.9857, 17.5998); //bartender
-    ApplyActorAnimation(g_Actor[10], "ON_LOOKERS", "PANIC_POINT", 4.0998, 1, 0, 0, 0, 0);
-    g_Actor[11] = CreateActor(153, -1579.3376, -2709.1928, 2.0455, -87.9999); //mechanic boss
-    ApplyActorAnimation(g_Actor[11], "ON_LOOKERS", "PANIC_SHOUT", 4.0998, 1, 0, 0, 0, 0);
-    g_Actor[12] = CreateActor(150, -1581.7580, -2557.0976, -5.7504, -111.6996); //receptionist
-    ApplyActorAnimation(g_Actor[12], "COP_AMBIENT", "COPLOOK_THINK", 4.0998, 1, 0, 0, 0, 0);
-    g_Actor[13] = CreateActor(289, -1581.0035, -2558.0080, -5.4780, -57.0000); //IT Guy
-    ApplyActorAnimation(g_Actor[13], "INT_SHOP", "SHOP_LOOKA", 4.0998, 1, 0, 0, 0, 0);
-    g_Actor[14] = CreateActor(3, -1592.8725, -2579.3640, -6.1553, 125.3999); //wardrobe man
-    ApplyActorAnimation(g_Actor[14], "BAR", "BARCUSTOM_LOOP", 4.0998, 1, 0, 0, 0, 0);
+    g_DynamicActor[ACTOR_ENTRY_GUARD] = CreateDynamicActor(71, -1570.8188, -2569.7690, 28.7656, 31.2999, .streamdistance = 50.0);
+    g_DynamicActor[ACTOR_HOMELESS] = CreateDynamicActor(78, -1510.5262, -2660.7250, -6.6230, 32.5998, .streamdistance = 50.0); 
+    g_DynamicActor[ACTOR_STAIRWAY_GUARD_1] = CreateDynamicActor(166, -1586.2397, -2561.5456, 0.1483, -59.2999, .streamdistance = 50.0); 
+    g_DynamicActor[ACTOR_MECHANIC] = CreateDynamicActor(50, -1603.0024, -2721.0073, 3.8322, 0.0000, .streamdistance = 50.0); 
+    g_DynamicActor[ACTOR_STAIRWAY_GUARD_2] = CreateDynamicActor(165, -1578.9365, -2554.5410, 23.1464, 125.4999, .streamdistance = 50.0); 
+    g_DynamicActor[ACTOR_RECEPTION_GUARD_1] = CreateDynamicActor(166, -1574.5638, -2563.5524, -5.2494, 123.5998, .streamdistance = 50.0); 
+    g_DynamicActor[ACTOR_CAMERAMAN] = CreateDynamicActor(98, -1590.0212, -2570.8911, -6.2136, -132.8000, .streamdistance = 50.0); 
+    g_DynamicActor[ACTOR_VIP] = CreateDynamicActor(147, -1588.7939, -2571.8769, -5.8014, 45.4998, .streamdistance = 50.0);
+    g_DynamicActor[ACTOR_RECEPTION_GUARD_2] = CreateDynamicActor(165, -1575.6761, -2564.2697, -5.3976, -58.7999, .streamdistance = 50.0);
+    g_DynamicActor[ACTOR_CHEF] = CreateDynamicActor(210, -1585.1816, -2569.4069, -6.3586, -55.0998, .streamdistance = 50.0);
+    g_DynamicActor[ACTOR_BARTENDER] = CreateDynamicActor(59, -1581.4663, -2575.1784, -5.9857, 17.5998, .streamdistance = 50.0); 
+    g_DynamicActor[ACTOR_FOREMAN] = CreateDynamicActor(153, -1579.3376, -2709.1928, 2.0455, -87.9999, .streamdistance = 50.0);
+    g_DynamicActor[ACTOR_RECEPTIONIST] = CreateDynamicActor(150, -1581.7580, -2557.0976, -5.7504, -111.6996, .streamdistance = 50.0);
+    g_DynamicActor[ACTOR_IT_SUPPORT] = CreateDynamicActor(289, -1581.0035, -2558.0080, -5.4780, -57.0000, .streamdistance = 50.0);
+    g_DynamicActor[ACTOR_STYLIST] = CreateDynamicActor(3, -1592.8725, -2579.3640, -6.1553, 125.3999, .streamdistance = 50.0);
 }
 
 DestroyGeneralItems() {
+    for(new idx, idx_limit = sizeof g_VehicleObject; idx < idx_limit; idx ++) {
+        DestroyObject( g_VehicleObject[idx] );
+    }
+
     for(new idx, idx_limit = sizeof g_DynamicObject; idx < idx_limit; idx ++) {
         DestroyDynamicObject( g_DynamicObject[idx] );
     }
@@ -1578,8 +1592,8 @@ DestroyGeneralItems() {
         DestroyVehicle( g_Vehicle[idx] );
     }
 
-    for(new idx, idx_limit = sizeof g_Actor; idx < idx_limit; idx ++) {
-        DestroyActor( g_Actor[idx] );
+    for(new idx, idx_limit = sizeof g_DynamicActor; idx < idx_limit; idx ++) {
+        DestroyActor( g_DynamicActor[idx] );
     }
 }
 
@@ -1719,6 +1733,59 @@ public OnPlayerLeaveDynamicArea(playerid, areaid) {
     for(new doorid; doorid < g_DoorsInitiated; doorid ++) {
         if( areaid == g_DoorData[doorid][e_DoorDynArea] ) {
             UpdateDoorState(doorid);
+            return 1;
+        }
+    }
+    return 1;
+}
+
+public OnDynamicActorStreamIn(actorid, forplayerid) {
+    for(new idx, idx_limit = sizeof g_DynamicActor; idx < idx_limit; idx ++) {
+        if( actorid == g_DynamicActor[idx] ) {
+            switch( idx ) {
+                case ACTOR_ENTRY_GUARD: {
+                    ApplyDynamicActorAnimation(g_DynamicActor[idx], "COP_AMBIENT", "COPLOOK_LOOP", 4.0998, 1, 0, 0, 0, 0);
+                }
+                case ACTOR_STAIRWAY_GUARD_1, ACTOR_STAIRWAY_GUARD_2: {
+                    ApplyDynamicActorAnimation(g_DynamicActor[idx], "MUSCULAR", "MUSCLEIDLE", 4.0998, 1, 0, 0, 0, 0);
+                }
+                case ACTOR_RECEPTION_GUARD_1: {
+                    ApplyDynamicActorAnimation(g_DynamicActor[idx], "MISC", "IDLE_CHAT_02", 4.0998, 1, 0, 0, 0, 0);
+                }
+                case ACTOR_RECEPTION_GUARD_2: {
+                    ApplyDynamicActorAnimation(g_DynamicActor[idx], "PED", "IDLE_CHAT", 4.0998, 1, 0, 0, 0, 0);
+                }
+                case ACTOR_MECHANIC: {
+                     ApplyDynamicActorAnimation(g_DynamicActor[idx], "COP_AMBIENT", "COPBROWSE_LOOP", 4.0998, 1, 0, 0, 0, 0);
+                }
+                case ACTOR_HOMELESS: {
+                    ApplyDynamicActorAnimation(g_DynamicActor[idx], "CRACK", "CRCKIDLE2", 4.0998, 1, 0, 0, 0, 0);
+                }
+                case ACTOR_CAMERAMAN: {
+                    ApplyDynamicActorAnimation(g_DynamicActor[idx], "MISC", "IDLE_CHAT_02", 4.0998, 1, 0, 0, 0, 0);
+                }
+                case ACTOR_VIP: {
+                    ApplyDynamicActorAnimation(g_DynamicActor[idx], "PED", "IDLE_CHAT", 4.0998, 1, 0, 0, 0, 0);
+                }
+                case ACTOR_CHEF: {
+                    ApplyDynamicActorAnimation(g_DynamicActor[idx], "ON_LOOKERS", "PANIC_LOOP", 4.0998, 1, 0, 0, 0, 0);
+                }
+                case ACTOR_BARTENDER: {
+                    ApplyDynamicActorAnimation(g_DynamicActor[idx], "ON_LOOKERS", "PANIC_POINT", 4.0998, 1, 0, 0, 0, 0);
+                }
+                case ACTOR_FOREMAN: {
+                    ApplyDynamicActorAnimation(g_DynamicActor[idx], "ON_LOOKERS", "PANIC_SHOUT", 4.0998, 1, 0, 0, 0, 0);
+                }
+                case ACTOR_RECEPTIONIST: {
+                      ApplyDynamicActorAnimation(g_DynamicActor[idx], "COP_AMBIENT", "COPLOOK_THINK", 4.0998, 1, 0, 0, 0, 0);
+                }
+                case ACTOR_IT_SUPPORT: {
+                    ApplyDynamicActorAnimation(g_DynamicActor[idx], "INT_SHOP", "SHOP_LOOKA", 4.0998, 1, 0, 0, 0, 0);
+                }
+                case ACTOR_STYLIST: {
+                    ApplyDynamicActorAnimation(g_DynamicActor[idx], "BAR", "BARCUSTOM_LOOP", 4.0998, 1, 0, 0, 0, 0);
+                }
+            }
             return 1;
         }
     }
